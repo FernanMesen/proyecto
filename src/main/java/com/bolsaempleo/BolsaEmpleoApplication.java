@@ -39,7 +39,3 @@ public class BolsaEmpleoApplication {
             );
         };
     }
-}
-
-
-//prueba3
