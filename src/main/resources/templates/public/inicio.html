@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+              xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bolsa de Empleo</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+    <style>
+        /* Tooltip hover CSS puro — sin JavaScript */
+        .tarjeta { position: relative; }
+        .tooltip-trigger { color: var(--color-link); font-size: 13px; font-weight: bold; cursor: default; }
+        .tooltip-trigger:hover .tooltip-contenido { display: block; }
+        .tooltip-contenido {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 0;
+            background: #fff;
+            border: 1px solid #bbb;
+            border-radius: 6px;
+            padding: 10px 14px;
+            min-width: 220px;
+            max-width: 300px;
+            box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+            z-index: 10;
+            font-size: 13px;
+            color: var(--texto-principal);
+        }
+        .tooltip-contenido ul { margin: 0; padding-left: 16px; }
+        .tooltip-contenido li { margin: 3px 0; color: var(--texto-secundario); }
+    </style>
+</head>
+<body>
+<header>
+    <div class="nav">
+        <div class="logo"><a href="/">BolsaEmpleo</a></div>
+        <div class="menu" sec:authorize="hasRole('OFERENTE')">
+            <a th:href="@{/oferente/dashboard}" class="activo">Inicio</a>
+            <a th:href="@{/puestos/buscar}">Ver puestos</a>
+            <a th:href="@{/oferente/habilidades}">Mis habilidades</a>
+            <a th:href="@{/oferente/cv}">Mi CV</a>
+        </div>
+        <div class="menu" sec:authorize="isAnonymous()">
+            <a th:href="@{/puestos/buscar}">Ver puestos</a>
+            <a th:href="@{/registro/empresa}">Registrar Empresa</a>
+            <a th:href="@{/registro/oferente}">Registrar Oferente</a>
+        </div>
+        <div class="login">
+            <a th:href="@{/login}">Login</a>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h1>Bolsa de Empleo</h1>
+    <p class="subtitulo">Últimos 5 puestos públicos disponibles</p>
+
+    <div class="contenedor-tarjetas">
+        <div class="tarjeta" th:each="puesto : ${puestos}">
+            <h3 th:text="${puesto.empresa.nombre}">Empresa</h3>
+            <p th:text="${puesto.descripcion}">Descripción del puesto</p>
+            <p class="salario" th:text="${puesto.salario != null ? '₡ ' + #numbers.formatDecimal(puesto.salario, 1, 'COMMA', 2, 'POINT') : 'Salario a convenir'}">₡ 0,00</p>
+
+            <span class="tooltip-trigger">
+                ▸ Ver características requeridas
+                <div class="tooltip-contenido">
+                    <strong>Características requeridas:</strong>
+                    <ul th:if="${not #lists.isEmpty(puesto.caracteristicas)}">
+                        <li th:each="req : ${puesto.caracteristicas}"
+                            th:text="${req.caracteristica.nombre + ' — nivel mín. ' + req.nivelMinimo}"></li>
+                    </ul>
+                    <p th:if="${#lists.isEmpty(puesto.caracteristicas)}">Sin características especificadas.</p>
+                </div>
+            </span>
+        </div>
+        <p class="sin-puestos" th:if="${#lists.isEmpty(puestos)}">
+            No hay puestos públicos registrados aún.
+        </p>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-left">
+        <strong>Bolsa de Empleo</strong>
+        <p>Total Soft Inc.</p>
+    </div>
+    <div class="footer-right">
+        <p>Contacto: info@bolsaempleo.local</p>
+        <p>Créditos: Equipo de desarrollo</p>
+    </div>
+</footer>
+</body>
+</html>

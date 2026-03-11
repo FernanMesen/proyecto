@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+                xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar Puestos — Bolsa de Empleo</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<header>
+    <div class="nav">
+        <div class="logo"><a href="/">BolsaEmpleo</a></div>
+
+        <div class="menu" sec:authorize="hasRole('OFERENTE')">
+            <a th:href="@{/oferente/dashboard}">Inicio</a>
+            <a th:href="@{/puestos/buscar}" class="activo">Ver puestos</a>
+            <a th:href="@{/oferente/habilidades}">Mis habilidades</a>
+            <a th:href="@{/oferente/cv}">Mi CV</a>
+        </div>
+
+        <div class="menu" sec:authorize="isAnonymous()">
+            <a th:href="@{/puestos/buscar}" class="activo">Ver puestos</a>
+            <a th:href="@{/registro/empresa}">Registrar Empresa</a>
+            <a th:href="@{/registro/oferente}">Registrar Oferente</a>
+        </div>
+
+        <div class="login">
+            <span sec:authorize="isAuthenticated()" sec:authentication="name"></span>
+            <a sec:authorize="isAnonymous()" th:href="@{/login}">Login</a>
+            <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post" style="display:inline">
+                <button type="submit" class="btn-salir">Salir</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="buscar-layout">
+        <div class="panel-busqueda">
+            <h2>Filtrar por características</h2>
+            <form th:action="@{/puestos/buscar}" method="get">
+                <div class="arbol-caracteristicas">
+                    <div th:each="raiz : ${raices}" class="arbol-item">
+                        <th:block th:if="${#lists.isEmpty(raiz.hijos)}">
+                            <label>
+                                <input type="checkbox" name="caracteristicaIds"
+                                       th:value="${raiz.id}"
+                                       th:checked="${caracteristicaIds != null and #lists.contains(caracteristicaIds, raiz.id)}">
+                                <span th:text="${raiz.nombre}">Característica</span>
+                            </label>
+                        </th:block>
+                        <th:block th:unless="${#lists.isEmpty(raiz.hijos)}">
+                            <p class="arbol-nombre-categoria" th:text="${raiz.nombre}">Categoría</p>
+                            <div class="arbol-hijos">
+                                <div th:each="hijo : ${raiz.hijos}" class="arbol-item">
+                                    <th:block th:if="${#lists.isEmpty(hijo.hijos)}">
+                                        <label>
+                                            <input type="checkbox" name="caracteristicaIds"
+                                                   th:value="${hijo.id}"
+                                                   th:checked="${caracteristicaIds != null and #lists.contains(caracteristicaIds, hijo.id)}">
+                                            <span th:text="${hijo.nombre}">Sub-característica</span>
+                                        </label>
+                                    </th:block>
+                                    <th:block th:unless="${#lists.isEmpty(hijo.hijos)}">
+                                        <p class="arbol-nombre-categoria" style="font-weight:normal;font-style:italic" th:text="${hijo.nombre}">Sub-cat</p>
+                                        <div class="arbol-hijos">
+                                            <div th:each="nieto : ${hijo.hijos}" class="arbol-item">
+                                                <label>
+                                                    <input type="checkbox" name="caracteristicaIds"
+                                                           th:value="${nieto.id}"
+                                                           th:checked="${caracteristicaIds != null and #lists.contains(caracteristicaIds, nieto.id)}">
+                                                    <span th:text="${nieto.nombre}">Nieto</span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </th:block>
+                                </div>
+                            </div>
+                        </th:block>
+                    </div>
+                    <p class="sin-puestos" th:if="${#lists.isEmpty(raices)}">No hay características registradas aún.</p>
+                </div>
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primario">Buscar</button>
+                    <a th:href="@{/puestos/buscar}" class="btn btn-secundario">Limpiar</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="panel-resultados" th:if="${resultados != null}">
+            <h2>Resultados</h2>
+            <div class="contenedor-resultados" th:unless="${#lists.isEmpty(resultados)}">
+                <div class="tarjeta" th:each="puesto : ${resultados}">
+                    <h3 th:text="${puesto.empresa.nombre}">Empresa</h3>
+                    <p th:text="${puesto.descripcion}">Descripción</p>
+                    <p class="salario" th:text="${puesto.salario != null ? '₡ ' + #numbers.formatDecimal(puesto.salario, 1, 'COMMA', 2, 'POINT') : 'Salario a convenir'}">₡ 0,00</p>
+                    <details>
+                        <summary>Ver detalle</summary>
+                        <ul th:if="${not #lists.isEmpty(puesto.caracteristicas)}">
+                            <li th:each="req : ${puesto.caracteristicas}"
+                                th:text="${req.caracteristica.nombre + ' (nivel mín. ' + req.nivelMinimo + ')'}"></li>
+                        </ul>
+                    </details>
+                    <div style="margin-top:0.75rem">
+                        <a th:href="@{/puestos/{id}/aplicar(id=${puesto.id})}" class="btn btn-primario">Aplicar</a>
+                    </div>
+                </div>
+            </div>
+            <p class="sin-resultados" th:if="${#lists.isEmpty(resultados)}">
+                No se encontraron puestos con las características seleccionadas.
+            </p>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-left"><strong>Bolsa de Empleo</strong><p>Total Soft Inc.</p></div>
+    <div class="footer-right"><p>Contacto: info@bolsaempleo.local</p><p>Créditos: Equipo de desarrollo</p></div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplicaciones al Puesto — Bolsa de Empleo</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+
+<header>
+    <div class="nav">
+        <div class="logo"><a href="/">BolsaEmpleo</a></div>
+        <div class="menu">
+            <a th:href="@{/empresa/dashboard}">Dashboard</a>
+            <a th:href="@{/empresa/puestos}" class="activo">Mis Puestos</a>
+        </div>
+        <div class="login">
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <button type="submit" class="btn-salir">Salir</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div class="contenedor">
+        <div class="page-header">
+            <h1>Aplicaciones recibidas</h1>
+            <p class="texto-secundario" th:text="${'Puesto: ' + puesto.descripcion}"></p>
+        </div>
+
+        <div th:if="${#lists.isEmpty(aplicaciones)}" class="alerta alerta-info">
+            Aún no hay aplicaciones para este puesto.
+        </div>
+
+        <table class="tabla" th:unless="${#lists.isEmpty(aplicaciones)}">
+                <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Teléfono</th>
+                    <th>Tipo</th>
+                    <th>Mensaje</th>
+                    <th>Fecha</th>
+                    <th>CV / Perfil</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="a : ${aplicaciones}">
+                    <td th:text="${a.nombreDisplay}">Nombre</td>
+                    <td th:text="${a.correoDisplay}">Correo</td>
+                    <td th:text="${a.telefonoInvitado != null ? a.telefonoInvitado : (a.oferente != null ? a.oferente.telefono : '—')}">Tel</td>
+                    <td>
+                        <span th:if="${a.oferente != null}" class="badge badge-publico">Registrado</span>
+                        <span th:unless="${a.oferente != null}" class="badge badge-privado">Invitado</span>
+                    </td>
+                    <td th:text="${a.mensaje != null ? a.mensaje : '—'}">Mensaje</td>
+                    <td th:text="${#temporals.format(a.fechaAplicacion,'dd/MM/yyyy')}">Fecha</td>
+                    <td>
+                        <a th:if="${a.oferente != null}"
+                           th:href="@{/empresa/candidatos/{id}(id=${a.oferente.id})}"
+                           class="btn btn-sm btn-primario">Ver perfil</a>
+                        <a th:if="${a.oferente == null and a.cvInvitado != null}"
+                           th:href="@{/uploads/cv/{f}(f=${a.cvInvitado})}"
+                           target="_blank" class="btn btn-sm btn-secundario">Ver CV</a>
+                        <span th:if="${a.oferente == null and a.cvInvitado == null}">—</span>
+                    </td>
+                </tr>
+                </tbody>
+        </table>
+
+        <div style="margin-top:1.5rem">
+            <a th:href="@{/empresa/puestos}" class="btn btn-secundario">Volver a mis puestos</a>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-left"><strong>Bolsa de Empleo</strong><p>Total Soft Inc.</p></div>
+    <div class="footer-right"><p>Contacto: info@bolsaempleo.local</p></div>
+</footer>
+</body>
+</html>
