@@ -40,4 +40,3 @@ public class BolsaEmpleoApplication {
         };
     }
 }
-//prueba

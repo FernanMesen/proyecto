@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis Habilidades — Bolsa de Empleo</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<header>
+    <div class="nav">
+        <div class="logo"><span>BolsaEmpleo</span></div>
+        <div class="menu">
+            <a th:href="@{/oferente/dashboard}">Inicio</a>
+            <a th:href="@{/puestos/buscar}">Ver puestos</a>
+            <a th:href="@{/oferente/habilidades}" class="activo">Mis habilidades</a>
+            <a th:href="@{/oferente/cv}">Mi CV</a>
+        </div>
+        <div class="login">
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit" class="btn-salir">Salir</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h1>Mis habilidades</h1>
+    <p class="subtitulo">Gestioná las características y niveles de tu perfil</p>
+
+    <div class="habilidades-layout">
+        <div class="panel-habilidades-lista">
+            <table th:if="${not #lists.isEmpty(habilidades)}">
+                <thead>
+                    <tr><th>Característica</th><th>Nivel</th><th>Ruta</th></tr>
+                </thead>
+                <tbody>
+                    <tr th:each="hab : ${habilidades}">
+                        <td th:text="${hab.caracteristica.nombre}">—</td>
+                        <td><strong th:text="${hab.nivel}">1</strong> / 5</td>
+                        <td class="texto-pequeño texto-secundario" th:text="${hab.caracteristica.getRutaCompleta()}">—</td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="sin-puestos" th:if="${#lists.isEmpty(habilidades)}">No tenés habilidades registradas. Agregá una desde el panel derecho.</p>
+        </div>
+
+        <div class="panel-agregar-habilidad">
+            <h3>Agregar / actualizar habilidad</h3>
+            <form th:action="@{/oferente/habilidades/agregar}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <div class="form-grupo">
+                    <label for="caracteristicaId">Característica</label>
+                    <select id="caracteristicaId" name="caracteristicaId" required>
+                        <option value="">— Seleccioná —</option>
+                        <option th:each="car : ${todasCaracteristicas}"
+                                th:value="${car.id}"
+                                th:text="${car.getRutaCompleta()}">Característica</option>
+                    </select>
+                </div>
+                <div class="form-grupo">
+                    <label for="nivel">Nivel (1 = básico, 5 = experto)</label>
+                    <select id="nivel" name="nivel">
+                        <option value="1">1 — Básico</option>
+                        <option value="2">2 — Elemental</option>
+                        <option value="3">3 — Intermedio</option>
+                        <option value="4">4 — Avanzado</option>
+                        <option value="5">5 — Experto</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primario">Guardar</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-left"><strong>Bolsa de Empleo</strong><p>Total Soft Inc.</p></div>
+    <div class="footer-right"><p>Contacto: info@bolsaempleo.local</p></div>
+</footer>
+</body>
+</html>

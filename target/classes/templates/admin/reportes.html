@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reportes — Bolsa de Empleo</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<header>
+    <div class="nav">
+        <div class="logo"><a href="/">BolsaEmpleo</a></div>
+        <div class="menu">
+            <a th:href="@{/admin/dashboard}">Panel</a>
+            <a th:href="@{/admin/empresas/pendientes}">Empresas</a>
+            <a th:href="@{/admin/oferentes/pendientes}">Oferentes</a>
+            <a th:href="@{/admin/caracteristicas}">Características</a>
+            <a th:href="@{/admin/reportes}" class="activo">Reportes</a>
+        </div>
+        <div class="login">
+            <form th:action="@{/logout}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <button type="submit" class="btn-salir">Salir</button>
+            </form>
+        </div>
+    </div>
+</header>
+
+<main>
+    <h1>Reportes PDF</h1>
+    <p class="subtitulo">Generá reportes de puestos por período</p>
+
+    <div class="reporte-filtros">
+        <h2>Puestos por mes</h2>
+        <form th:action="@{/admin/reportes/pdf}" method="get">
+            <div class="form-grupo">
+                <label for="mes">Mes</label>
+                <select id="mes" name="mes">
+                    <option value="1">Enero</option>
+                    <option value="2">Febrero</option>
+                    <option value="3">Marzo</option>
+                    <option value="4">Abril</option>
+                    <option value="5">Mayo</option>
+                    <option value="6">Junio</option>
+                    <option value="7">Julio</option>
+                    <option value="8">Agosto</option>
+                    <option value="9">Septiembre</option>
+                    <option value="10">Octubre</option>
+                    <option value="11">Noviembre</option>
+                    <option value="12">Diciembre</option>
+                </select>
+            </div>
+            <div class="form-grupo">
+                <label for="anio">Año</label>
+                <input type="number" id="anio" name="anio" value="2026" min="2020" max="2099">
+            </div>
+            <button type="submit" class="btn btn-primario">Descargar PDF</button>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <div class="footer-left"><strong>Bolsa de Empleo</strong><p>Total Soft Inc.</p></div>
+    <div class="footer-right"><p>Contacto: info@bolsaempleo.local</p></div>
+</footer>
+</body>
+</html>
