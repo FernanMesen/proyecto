@@ -1003,3 +1003,21 @@ footer {
         width: 100%;
     }
 }
+.barra-contenedor {
+    width: 100%;
+    background: #e0ddd6;
+    border-radius: 6px;
+    height: 12px;
+    overflow: hidden;
+    margin-bottom: 3px;
+}
+
+.barra-relleno {
+    height: 100%;
+    border-radius: 6px;
+    transition: width 0.3s ease;
+}
+
+.barra-alta  { background: #28a745; }
+.barra-media { background: #f0a500; }
+.barra-baja  { background: #cc3333; }
