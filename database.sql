@@ -1,10 +1,3 @@
--- =============================================
--- BOLSA DE EMPLEO — Script SQL Server
--- EIF209 Programación 4 — 2026-01
--- Ejecutar conectado como: sa / StrongPass123!
--- =============================================
-
--- Crear base de datos
 IF NOT EXISTS (SELECT name FROM sys.databases WHERE name = 'bolsa_empleo')
     CREATE DATABASE bolsa_empleo;
 GO
@@ -12,11 +5,6 @@ GO
 USE bolsa_empleo;
 GO
 
--- =============================================
--- TABLAS
--- =============================================
-
--- USUARIO (tabla base para login)
 CREATE TABLE usuario (
     id             BIGINT IDENTITY(1,1) PRIMARY KEY,
     correo         NVARCHAR(150) NOT NULL UNIQUE,
@@ -28,7 +16,6 @@ CREATE TABLE usuario (
 );
 GO
 
--- EMPRESA
 CREATE TABLE empresa (
     id           BIGINT IDENTITY(1,1) PRIMARY KEY,
     usuario_id   BIGINT        NOT NULL UNIQUE,
@@ -40,7 +27,6 @@ CREATE TABLE empresa (
 );
 GO
 
--- OFERENTE
 CREATE TABLE oferente (
     id              BIGINT IDENTITY(1,1) PRIMARY KEY,
     usuario_id      BIGINT        NOT NULL UNIQUE,
@@ -55,7 +41,6 @@ CREATE TABLE oferente (
 );
 GO
 
--- CARACTERÍSTICA (árbol jerárquico)
 CREATE TABLE caracteristica (
     id       BIGINT IDENTITY(1,1) PRIMARY KEY,
     nombre   NVARCHAR(150) NOT NULL,
@@ -64,7 +49,6 @@ CREATE TABLE caracteristica (
 );
 GO
 
--- HABILIDAD del oferente
 CREATE TABLE habilidad (
     id                BIGINT IDENTITY(1,1) PRIMARY KEY,
     oferente_id       BIGINT NOT NULL,
@@ -76,7 +60,6 @@ CREATE TABLE habilidad (
 );
 GO
 
--- PUESTO DE TRABAJO
 CREATE TABLE puesto (
     id             BIGINT IDENTITY(1,1) PRIMARY KEY,
     empresa_id     BIGINT          NOT NULL,
@@ -90,7 +73,6 @@ CREATE TABLE puesto (
 );
 GO
 
--- CARACTERÍSTICA REQUERIDA POR EL PUESTO
 CREATE TABLE puesto_caracteristica (
     id                BIGINT IDENTITY(1,1) PRIMARY KEY,
     puesto_id         BIGINT NOT NULL,
@@ -102,18 +84,12 @@ CREATE TABLE puesto_caracteristica (
 );
 GO
 
--- =============================================
--- DATOS INICIALES
--- =============================================
-
--- Admin por defecto  (clave: admin123  —  hash BCrypt)
 INSERT INTO usuario (correo, clave, rol, activo)
 VALUES ('admin@bolsaempleo.local',
         '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LPZdIFiRnUu',
         'ADMIN', 1);
 GO
 
--- Categorías raíz
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Bases de Datos',           NULL);
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Ciberseguridad',           NULL);
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Lenguajes de programación',NULL);
@@ -121,7 +97,6 @@ INSERT INTO caracteristica (nombre, padre_id) VALUES ('Tecnologías Web',       
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Testing',                  NULL);
 GO
 
--- Sub-categorías (padre_id corresponde al IDENTITY generado arriba)
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('MySql',      1);
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Oracle',     1);
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('C#',         3);
@@ -133,7 +108,6 @@ INSERT INTO caracteristica (nombre, padre_id) VALUES ('JavaScript', 4);
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('JUnit',      5);
 GO
 
--- Sub-subcategorías de JUnit (id = 14 si se insertaron en orden)
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Assertions', 14);
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Test cases',  14);
 GO
