@@ -35,7 +35,7 @@
                     <th>Identificación</th>
                     <th>Residencia</th>
                     <th>Teléfono</th>
-                    <th>% Compatibilidad</th>
+                    <th>Compatibilidad</th>
                     <th>Características cumplidas</th>
                     <th>Acciones</th>
                 </tr>
@@ -47,7 +47,13 @@
                     <td th:text="${resultado.oferente.residencia}">Ciudad</td>
                     <td th:text="${resultado.oferente.telefono}">Tel</td>
                     <td>
-                        <strong th:text="${resultado.getPorcentajeFormateado()}">0%</strong>
+                        <div class="barra-contenedor">
+                            <div class="barra-relleno"
+                                 th:style="'width:' + ${resultado.porcentaje} + '%'"
+                                 th:classappend="${resultado.porcentaje >= 75} ? 'barra-alta' : (${resultado.porcentaje >= 40} ? 'barra-media' : 'barra-baja')">
+                            </div>
+                        </div>
+                        <small th:text="${resultado.getPorcentajeFormateado()}">0%</small>
                     </td>
                     <td th:text="${resultado.cumplidos + ' / ' + resultado.totalRequeridos}">0/0</td>
                     <td>
