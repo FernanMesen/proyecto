@@ -20,22 +20,23 @@ public class BolsaEmpleoApplication {
                                               PasswordEncoder encoder) {
         return args -> {
             String correo = "admin@bolsaempleo.local";
-            String clave  = "admin123";
+            String clave = "admin123";
 
             usuarioRepo.findByCorreo(correo).ifPresentOrElse(
-                admin -> {
-                    admin.setClave(encoder.encode(clave));
-                    admin.setActivo(true);
-                    usuarioRepo.save(admin);
-                },
-                () -> {
-                    Usuario admin = new Usuario();
-                    admin.setCorreo(correo);
-                    admin.setClave(encoder.encode(clave));
-                    admin.setRol(Usuario.Rol.ADMIN);
-                    admin.setActivo(true);
-                    usuarioRepo.save(admin);
-                }
+                    admin -> {
+                        admin.setClave(encoder.encode(clave));
+                        admin.setActivo(true);
+                        usuarioRepo.save(admin);
+                    },
+                    () -> {
+                        Usuario admin = new Usuario();
+                        admin.setCorreo(correo);
+                        admin.setClave(encoder.encode(clave));
+                        admin.setRol(Usuario.Rol.ADMIN);
+                        admin.setActivo(true);
+                        usuarioRepo.save(admin);
+                    }
             );
         };
     }
+}
