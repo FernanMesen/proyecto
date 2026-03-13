@@ -15,6 +15,7 @@
             <a th:href="@{/empresa/puestos/nuevo}">Nuevo puesto</a>
         </div>
         <div class="login">
+            <span class="usuario-nombre" th:text="${empresa.nombre}"></span>
             <form th:action="@{/logout}" method="post" style="display:inline">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <button type="submit" class="btn-salir">Salir</button>
@@ -36,45 +37,45 @@
     <div class="tabla-contenedor">
         <table>
             <thead>
-                <tr>
-                    <th>Descripción</th>
-                    <th>Salario</th>
-                    <th>Tipo</th>
-                    <th>Estado</th>
-                    <th>Fecha</th>
-                    <th>Acciones</th>
-                </tr>
+            <tr>
+                <th>Descripción</th>
+                <th>Salario</th>
+                <th>Tipo</th>
+                <th>Estado</th>
+                <th>Fecha</th>
+                <th>Acciones</th>
+            </tr>
             </thead>
             <tbody>
-                <tr th:each="puesto : ${puestos}">
-                    <td th:text="${puesto.descripcion}">Desc</td>
-                    <td th:text="${puesto.salario != null ? '₡ ' + #numbers.formatDecimal(puesto.salario, 1, 'COMMA', 2, 'POINT') : '—'}">₡</td>
-                    <td th:text="${puesto.tipo}">PUBLICO</td>
-                    <td>
-                        <span class="badge badge-activo" th:if="${puesto.activo}">Activo</span>
-                        <span class="badge badge-inactivo" th:unless="${puesto.activo}">Inactivo</span>
-                    </td>
-                    <td th:text="${#temporals.format(puesto.fechaRegistro,'dd/MM/yyyy')}">—</td>
-                    <td>
-                        <div class="acciones-tabla">
-                            <a th:href="@{/empresa/candidatos/buscar(puestoId=${puesto.id})}" class="btn btn-sm btn-primario">Candidatos</a>
-                            <a th:href="@{/empresa/puestos/{id}/aplicaciones(id=${puesto.id})}" class="btn btn-sm btn-secundario">Aplicaciones</a>
-                            <form th:if="${puesto.activo}" th:action="@{/empresa/puestos/{id}/desactivar(id=${puesto.id})}" method="post" style="display:inline">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                                <button type="submit" class="btn btn-sm btn-peligro"
-                                        onclick="return confirm('¿Desactivar este puesto?')">Desactivar</button>
-                            </form>
-                            <form th:unless="${puesto.activo}" th:action="@{/empresa/puestos/{id}/activar(id=${puesto.id})}" method="post" style="display:inline">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                                <button type="submit" class="btn btn-sm btn-ok"
-                                        onclick="return confirm('¿Activar este puesto?')">Activar</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(puestos)}">
-                    <td colspan="6" class="sin-puestos" style="text-align:center;padding:20px">No tenés puestos publicados aún.</td>
-                </tr>
+            <tr th:each="puesto : ${puestos}">
+                <td th:text="${puesto.descripcion}">Desc</td>
+                <td th:text="${puesto.salario != null ? '₡ ' + #numbers.formatDecimal(puesto.salario, 1, 'COMMA', 2, 'POINT') : '—'}">₡</td>
+                <td th:text="${puesto.tipo}">PUBLICO</td>
+                <td>
+                    <span class="badge badge-activo" th:if="${puesto.activo}">Activo</span>
+                    <span class="badge badge-inactivo" th:unless="${puesto.activo}">Inactivo</span>
+                </td>
+                <td th:text="${#temporals.format(puesto.fechaRegistro,'dd/MM/yyyy')}">—</td>
+                <td>
+                    <div class="acciones-tabla">
+                        <a th:href="@{/empresa/candidatos/buscar(puestoId=${puesto.id})}" class="btn btn-sm btn-primario">Candidatos</a>
+                        <a th:href="@{/empresa/puestos/{id}/aplicaciones(id=${puesto.id})}" class="btn btn-sm btn-secundario">Aplicaciones</a>
+                        <form th:if="${puesto.activo}" th:action="@{/empresa/puestos/{id}/desactivar(id=${puesto.id})}" method="post" style="display:inline">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button type="submit" class="btn btn-sm btn-peligro"
+                                    onclick="return confirm('¿Desactivar este puesto?')">Desactivar</button>
+                        </form>
+                        <form th:unless="${puesto.activo}" th:action="@{/empresa/puestos/{id}/activar(id=${puesto.id})}" method="post" style="display:inline">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                            <button type="submit" class="btn btn-sm btn-ok"
+                                    onclick="return confirm('¿Activar este puesto?')">Activar</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(puestos)}">
+                <td colspan="6" class="sin-puestos" style="text-align:center;padding:20px">No tenés puestos publicados aún.</td>
+            </tr>
             </tbody>
         </table>
     </div>

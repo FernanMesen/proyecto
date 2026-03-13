@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi CV — Bolsa de Empleo</title>
@@ -16,6 +17,7 @@
             <a th:href="@{/oferente/cv}" class="activo">Mi CV</a>
         </div>
         <div class="login">
+            <span class="usuario-nombre" sec:authentication="name"></span>
             <form th:action="@{/logout}" method="post" style="display:inline">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <button type="submit" class="btn-salir">Salir</button>
