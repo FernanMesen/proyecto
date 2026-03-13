@@ -55,13 +55,16 @@ public class EmpresaController {
 
     @GetMapping("/puestos")
     public String misPuestos(@AuthenticationPrincipal UserDetails ud, Model model) {
-        model.addAttribute("puestos", puestoRepo.findByEmpresa(getEmpresa(ud)));
+        Empresa empresa = getEmpresa(ud);
+        model.addAttribute("puestos", puestoRepo.findByEmpresa(empresa));
+        model.addAttribute("empresa", empresa);
         return "empresa/puestos";
     }
 
     @GetMapping("/puestos/nuevo")
-    public String formNuevoPuesto(Model model) {
+    public String formNuevoPuesto(@AuthenticationPrincipal UserDetails ud, Model model) {
         model.addAttribute("caracteristicas", carRepo.findAll());
+        model.addAttribute("empresa", getEmpresa(ud));
         return "empresa/nuevo-puesto";
     }
 
@@ -92,6 +95,7 @@ public class EmpresaController {
         } catch (Exception ex) {
             model.addAttribute("error", ex.getMessage());
             model.addAttribute("caracteristicas", carRepo.findAll());
+            model.addAttribute("empresa", getEmpresa(ud));
             return "empresa/nuevo-puesto";
         }
     }
@@ -113,9 +117,12 @@ public class EmpresaController {
     }
 
     @GetMapping("/candidatos/buscar")
-    public String buscarCandidatos(@RequestParam Long puestoId, Model model) {
+    public String buscarCandidatos(@RequestParam Long puestoId,
+                                   @AuthenticationPrincipal UserDetails ud,
+                                   Model model) {
         model.addAttribute("puesto",     puestoRepo.findById(puestoId).orElseThrow());
         model.addAttribute("candidatos", puestoService.buscarCandidatos(puestoId));
+        model.addAttribute("empresa",    getEmpresa(ud));
         return "empresa/candidatos";
     }
 
@@ -128,14 +135,18 @@ public class EmpresaController {
         if (!puesto.getEmpresa().getId().equals(empresa.getId())) {
             return "redirect:/empresa/puestos";
         }
-        model.addAttribute("puesto", puesto);
+        model.addAttribute("puesto",       puesto);
         model.addAttribute("aplicaciones", aplicacionRepo.findByPuestoId(id));
+        model.addAttribute("empresa",      empresa);
         return "empresa/aplicaciones";
     }
 
     @GetMapping("/candidatos/{id}")
-    public String detalleCandidato(@PathVariable Long id, Model model) {
+    public String detalleCandidato(@PathVariable Long id,
+                                   @AuthenticationPrincipal UserDetails ud,
+                                   Model model) {
         model.addAttribute("oferente", oferenteRepo.findById(id).orElseThrow());
+        model.addAttribute("empresa",  getEmpresa(ud));
         return "empresa/detalle-candidato";
     }
 }

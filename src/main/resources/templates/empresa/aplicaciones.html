@@ -16,7 +16,9 @@
             <a th:href="@{/empresa/puestos}" class="activo">Mis Puestos</a>
         </div>
         <div class="login">
+            <span class="usuario-nombre" th:text="${empresa.nombre}"></span>
             <form th:action="@{/logout}" method="post" style="display:inline">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <button type="submit" class="btn-salir">Salir</button>
             </form>
         </div>
@@ -35,39 +37,39 @@
         </div>
 
         <table class="tabla" th:unless="${#lists.isEmpty(aplicaciones)}">
-                <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Correo</th>
-                    <th>Teléfono</th>
-                    <th>Tipo</th>
-                    <th>Mensaje</th>
-                    <th>Fecha</th>
-                    <th>CV / Perfil</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="a : ${aplicaciones}">
-                    <td th:text="${a.nombreDisplay}">Nombre</td>
-                    <td th:text="${a.correoDisplay}">Correo</td>
-                    <td th:text="${a.telefonoInvitado != null ? a.telefonoInvitado : (a.oferente != null ? a.oferente.telefono : '—')}">Tel</td>
-                    <td>
-                        <span th:if="${a.oferente != null}" class="badge badge-publico">Registrado</span>
-                        <span th:unless="${a.oferente != null}" class="badge badge-privado">Invitado</span>
-                    </td>
-                    <td th:text="${a.mensaje != null ? a.mensaje : '—'}">Mensaje</td>
-                    <td th:text="${#temporals.format(a.fechaAplicacion,'dd/MM/yyyy')}">Fecha</td>
-                    <td>
-                        <a th:if="${a.oferente != null}"
-                           th:href="@{/empresa/candidatos/{id}(id=${a.oferente.id})}"
-                           class="btn btn-sm btn-primario">Ver perfil</a>
-                        <a th:if="${a.oferente == null and a.cvInvitado != null}"
-                           th:href="@{/uploads/cv/{f}(f=${a.cvInvitado})}"
-                           target="_blank" class="btn btn-sm btn-secundario">Ver CV</a>
-                        <span th:if="${a.oferente == null and a.cvInvitado == null}">—</span>
-                    </td>
-                </tr>
-                </tbody>
+            <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Teléfono</th>
+                <th>Tipo</th>
+                <th>Mensaje</th>
+                <th>Fecha</th>
+                <th>CV / Perfil</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="a : ${aplicaciones}">
+                <td th:text="${a.nombreDisplay}">Nombre</td>
+                <td th:text="${a.correoDisplay}">Correo</td>
+                <td th:text="${a.telefonoInvitado != null ? a.telefonoInvitado : (a.oferente != null ? a.oferente.telefono : '—')}">Tel</td>
+                <td>
+                    <span th:if="${a.oferente != null}" class="badge badge-publico">Registrado</span>
+                    <span th:unless="${a.oferente != null}" class="badge badge-privado">Invitado</span>
+                </td>
+                <td th:text="${a.mensaje != null ? a.mensaje : '—'}">Mensaje</td>
+                <td th:text="${#temporals.format(a.fechaAplicacion,'dd/MM/yyyy')}">Fecha</td>
+                <td>
+                    <a th:if="${a.oferente != null}"
+                       th:href="@{/empresa/candidatos/{id}(id=${a.oferente.id})}"
+                       class="btn btn-sm btn-primario">Ver perfil</a>
+                    <a th:if="${a.oferente == null and a.cvInvitado != null}"
+                       th:href="@{/uploads/cv/{f}(f=${a.cvInvitado})}"
+                       target="_blank" class="btn btn-sm btn-secundario">Ver CV</a>
+                    <span th:if="${a.oferente == null and a.cvInvitado == null}">—</span>
+                </td>
+            </tr>
+            </tbody>
         </table>
 
         <div style="margin-top:1.5rem">

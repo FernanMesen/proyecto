@@ -1,5 +1,6 @@
 <!doctype html>
-<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Habilidades — Bolsa de Empleo</title>
@@ -16,6 +17,7 @@
             <a th:href="@{/oferente/cv}">Mi CV</a>
         </div>
         <div class="login">
+            <span class="usuario-nombre" sec:authentication="name"></span>
             <form th:action="@{/logout}" method="post" style="display:inline">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <button type="submit" class="btn-salir">Salir</button>
@@ -32,14 +34,14 @@
         <div class="panel-habilidades-lista">
             <table th:if="${not #lists.isEmpty(habilidades)}">
                 <thead>
-                    <tr><th>Característica</th><th>Nivel</th><th>Ruta</th></tr>
+                <tr><th>Característica</th><th>Nivel</th><th>Ruta</th></tr>
                 </thead>
                 <tbody>
-                    <tr th:each="hab : ${habilidades}">
-                        <td th:text="${hab.caracteristica.nombre}">—</td>
-                        <td><strong th:text="${hab.nivel}">1</strong> / 5</td>
-                        <td class="texto-pequeño texto-secundario" th:text="${hab.caracteristica.getRutaCompleta()}">—</td>
-                    </tr>
+                <tr th:each="hab : ${habilidades}">
+                    <td th:text="${hab.caracteristica.nombre}">—</td>
+                    <td><strong th:text="${hab.nivel}">1</strong> / 5</td>
+                    <td class="texto-pequeño texto-secundario" th:text="${hab.caracteristica.getRutaCompleta()}">—</td>
+                </tr>
                 </tbody>
             </table>
             <p class="sin-puestos" th:if="${#lists.isEmpty(habilidades)}">No tenés habilidades registradas. Agregá una desde el panel derecho.</p>

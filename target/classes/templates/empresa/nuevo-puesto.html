@@ -40,6 +40,7 @@
             <a th:href="@{/empresa/puestos/nuevo}" class="activo">Nuevo puesto</a>
         </div>
         <div class="login">
+            <span class="usuario-nombre" th:text="${empresa.nombre}"></span>
             <form th:action="@{/logout}" method="post" style="display:inline">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                 <button type="submit" class="btn-salir">Salir</button>
