@@ -84,8 +84,8 @@ VALUES (
 
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Bases de Datos', NULL);
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Ciberseguridad', NULL);
-INSERT INTO caracteristica (nombre, padre_id) VALUES ('Lenguajes de programación', NULL);
-INSERT INTO caracteristica (nombre, padre_id) VALUES ('Tecnologías Web', NULL);
+INSERT INTO caracteristica (nombre, padre_id) VALUES ('Lenguajes de programacion', NULL);
+INSERT INTO caracteristica (nombre, padre_id) VALUES ('Tecnologias Web', NULL);
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('Testing', NULL);
 
 INSERT INTO caracteristica (nombre, padre_id) VALUES ('MySql', 1);
