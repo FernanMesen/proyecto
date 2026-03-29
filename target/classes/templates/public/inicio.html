@@ -1,13 +1,12 @@
 <!doctype html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org"
-              xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bolsa de Empleo</title>
     <link rel="stylesheet" th:href="@{/css/estilos.css}">
     <style>
-        /* Tooltip hover CSS puro — sin JavaScript */
         .tarjeta { position: relative; }
         .tooltip-trigger { color: var(--color-link); font-size: 13px; font-weight: bold; cursor: default; }
         .tooltip-trigger:hover .tooltip-contenido { display: block; }
@@ -34,7 +33,12 @@
 <body>
 <header>
     <div class="nav">
-        <div class="logo"><a href="/">BolsaEmpleo</a></div>
+        <div class="logo">
+            <a href="/">
+                <img th:src="@{/images/ofertasEmpleo.png}" alt="Logo BolsaEmpleo" class="logo-img">
+                <span>BolsaEmpleo</span>
+            </a>
+        </div>
         <div class="menu" sec:authorize="hasRole('OFERENTE')">
             <a th:href="@{/oferente/dashboard}" class="activo">Inicio</a>
             <a th:href="@{/puestos/buscar}">Buscar Puestos</a>
@@ -47,7 +51,10 @@
             <a th:href="@{/registro/oferente}">Registrar Oferente</a>
         </div>
         <div class="login">
-            <a th:href="@{/login}">Login</a>
+            <a th:href="@{/login}" class="login-link-con-icono">
+                <img th:src="@{/images/enter.png}" alt="Entrar" class="enter-icono">
+                <span>Login</span>
+            </a>
         </div>
     </div>
 </header>

@@ -29,33 +29,31 @@
     <h1>Oferentes pendientes de aprobación</h1>
 
     <div class="alerta alerta-exito" th:if="${param.aprobado != null}">
-        Oferente aprobado: <strong th:text="${param.aprobado}"></strong> —
-        Contraseña temporal: <strong th:text="${param.clave}"></strong>
-        <span class="texto-pequeño">(Comunicá esta clave al usuario)</span>
+        Oferente aprobado: <strong th:text="${param.aprobado}"></strong>
     </div>
 
     <div class="tabla-contenedor">
         <table>
             <thead>
-                <tr><th>Nombre</th><th>Identificación</th><th>Correo</th><th>Teléfono</th><th>Residencia</th><th>Acción</th></tr>
+            <tr><th>Nombre</th><th>Identificación</th><th>Correo</th><th>Teléfono</th><th>Residencia</th><th>Acción</th></tr>
             </thead>
             <tbody>
-                <tr th:each="of : ${oferentes}">
-                    <td th:text="${of.getNombreCompleto()}">—</td>
-                    <td th:text="${of.identificacion}">—</td>
-                    <td th:text="${of.usuario.correo}">—</td>
-                    <td th:text="${of.telefono}">—</td>
-                    <td th:text="${of.residencia}">—</td>
-                    <td>
-                        <form th:action="@{/admin/oferentes/{id}/aprobar(id=${of.id})}" method="post">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                            <button type="submit" class="btn btn-exito btn-sm">Aprobar</button>
-                        </form>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(oferentes)}">
-                    <td colspan="6" style="text-align:center;padding:20px" class="texto-secundario">No hay oferentes pendientes.</td>
-                </tr>
+            <tr th:each="of : ${oferentes}">
+                <td th:text="${of.getNombreCompleto()}">—</td>
+                <td th:text="${of.identificacion}">—</td>
+                <td th:text="${of.usuario.correo}">—</td>
+                <td th:text="${of.telefono}">—</td>
+                <td th:text="${of.residencia}">—</td>
+                <td>
+                    <form th:action="@{/admin/oferentes/{id}/aprobar(id=${of.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" class="btn btn-exito btn-sm">Aprobar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(oferentes)}">
+                <td colspan="6" style="text-align:center;padding:20px" class="texto-secundario">No hay oferentes pendientes.</td>
+            </tr>
             </tbody>
         </table>
     </div>

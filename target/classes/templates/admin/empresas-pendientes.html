@@ -29,33 +29,31 @@
     <h1>Empresas pendientes de aprobación</h1>
 
     <div class="alerta alerta-exito" th:if="${param.aprobado != null}">
-        Empresa aprobada: <strong th:text="${param.aprobado}"></strong> —
-        Contraseña temporal: <strong th:text="${param.clave}"></strong>
-        <span class="texto-pequeño">(Comunicá esta clave al usuario)</span>
+        Empresa aprobada: <strong th:text="${param.aprobado}"></strong>
     </div>
 
     <div class="tabla-contenedor">
         <table>
             <thead>
-                <tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Localización</th><th>Descripción</th><th>Acción</th></tr>
+            <tr><th>Nombre</th><th>Correo</th><th>Teléfono</th><th>Localización</th><th>Descripción</th><th>Acción</th></tr>
             </thead>
             <tbody>
-                <tr th:each="emp : ${empresas}">
-                    <td th:text="${emp.nombre}">—</td>
-                    <td th:text="${emp.usuario.correo}">—</td>
-                    <td th:text="${emp.telefono}">—</td>
-                    <td th:text="${emp.localizacion}">—</td>
-                    <td th:text="${emp.descripcion}">—</td>
-                    <td>
-                        <form th:action="@{/admin/empresas/{id}/aprobar(id=${emp.id})}" method="post">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
-                            <button type="submit" class="btn btn-exito btn-sm">Aprobar</button>
-                        </form>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(empresas)}">
-                    <td colspan="6" style="text-align:center;padding:20px" class="texto-secundario">No hay empresas pendientes.</td>
-                </tr>
+            <tr th:each="emp : ${empresas}">
+                <td th:text="${emp.nombre}">—</td>
+                <td th:text="${emp.usuario.correo}">—</td>
+                <td th:text="${emp.telefono}">—</td>
+                <td th:text="${emp.localizacion}">—</td>
+                <td th:text="${emp.descripcion}">—</td>
+                <td>
+                    <form th:action="@{/admin/empresas/{id}/aprobar(id=${emp.id})}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <button type="submit" class="btn btn-exito btn-sm">Aprobar</button>
+                    </form>
+                </td>
+            </tr>
+            <tr th:if="${#lists.isEmpty(empresas)}">
+                <td colspan="6" style="text-align:center;padding:20px" class="texto-secundario">No hay empresas pendientes.</td>
+            </tr>
             </tbody>
         </table>
     </div>

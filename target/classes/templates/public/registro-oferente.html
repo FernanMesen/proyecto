@@ -9,13 +9,23 @@
 <body>
 <header>
     <div class="nav">
-        <div class="logo"><a href="/">BolsaEmpleo</a></div>
+        <div class="logo">
+            <a href="/">
+                <img th:src="@{/images/ofertasEmpleo.png}" alt="Logo BolsaEmpleo" class="logo-img">
+                <span>BolsaEmpleo</span>
+            </a>
+        </div>
         <div class="menu">
             <a th:href="@{/puestos/buscar}">Buscar puestos</a>
             <a th:href="@{/registro/empresa}">Registro Empresa</a>
             <a th:href="@{/registro/oferente}" class="activo">Registro Oferente</a>
         </div>
-        <div class="login"><a th:href="@{/login}">Login</a></div>
+        <div class="login">
+            <a th:href="@{/login}" class="login-link-con-icono">
+                <img th:src="@{/images/enter.png}" alt="Entrar" class="enter-icono">
+                <span>Login</span>
+            </a>
+        </div>
     </div>
 </header>
 
@@ -76,7 +86,7 @@
 
 <footer>
     <div class="footer-left"><strong>Bolsa de Empleo</strong><p>Universidad Nacional de Costa Rica</p></div>
-    <div class="footer-right"><p>Contacto: info@bolsaempleo.local</p><p>Créditos: Equipo de desarrollo</p></div>
+    <div class="footer-right"><p>Contacto: info@bolsaempleo.local</p></div>
 </footer>
 </body>
 </html>
