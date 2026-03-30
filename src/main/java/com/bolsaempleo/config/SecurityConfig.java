@@ -49,7 +49,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/", "/puestos/buscar", "/puestos/*/aplicar",
                                 "/registro/**", "/login",
-                                "/css/*", "/js/", "/images/", "/uploads/*").permitAll()
+                                "/css/**", "/js/**", "/images/**", "/uploads/**").permitAll()
                         .requestMatchers("/empresa/**").hasRole("EMPRESA")
                         .requestMatchers("/oferente/**").hasRole("OFERENTE")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
