@@ -28,14 +28,14 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService(UsuarioRepository usuarioRepo) {
         return correo -> {
             Usuario u = usuarioRepo.findByCorreo(correo)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + correo));
+                    .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + correo));
 
             return new org.springframework.security.core.userdetails.User(
-                u.getCorreo(),
-                u.getClave(),
-                u.isActivo(),  
-                true, true, true,
-                List.of(new SimpleGrantedAuthority("ROLE_" + u.getRol().name()))
+                    u.getCorreo(),
+                    u.getClave(),
+                    u.isActivo(),
+                    true, true, true,
+                    List.of(new SimpleGrantedAuthority("ROLE_" + u.getRol().name()))
             );
         };
     }
@@ -43,29 +43,30 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-            .csrf(csrf -> csrf
-                .ignoringRequestMatchers("/puestos/*/aplicar")
-            )
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/", "/puestos/buscar", "/puestos/*/aplicar",
-                                 "/registro/**", "/login", "/css/**", "/js/**").permitAll()
-                .requestMatchers("/empresa/**").hasRole("EMPRESA")
-                .requestMatchers("/oferente/**").hasRole("OFERENTE")
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated()
-            )
-            .formLogin(form -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/login")
-                .successHandler(loginSuccessHandler())
-                .failureUrl("/login?error=true")
-                .permitAll()
-            )
-            .logout(logout -> logout
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/")
-                .permitAll()
-            );
+                .csrf(csrf -> csrf
+                        .ignoringRequestMatchers("/puestos/*/aplicar")
+                )
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/", "/puestos/buscar", "/puestos/*/aplicar",
+                                "/registro/**", "/login",
+                                "/css/*", "/js/", "/images/", "/uploads/*").permitAll()
+                        .requestMatchers("/empresa/**").hasRole("EMPRESA")
+                        .requestMatchers("/oferente/**").hasRole("OFERENTE")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login")
+                        .loginProcessingUrl("/login")
+                        .successHandler(loginSuccessHandler())
+                        .failureUrl("/login?error=true")
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/")
+                        .permitAll()
+                );
         return http.build();
     }
 
